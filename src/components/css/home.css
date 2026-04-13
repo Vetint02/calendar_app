@@ -1,0 +1,42 @@
+.calendar_headers {
+    display: flex;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.head {
+    width: 102px;
+    text-align: center;
+    margin: 10px
+}
+
+.calendar {
+    width: 854px;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.calendar_contents {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+.calendar_box {
+    min-width: 100px;
+    height: 100px;
+    border: solid darkgrey 1px;
+    margin: 10px 10px;
+}
+
+.calendar_box:hover {
+    background-color: lightgrey;
+    transition: ease 0.3s
+}
+
+.padding_box {
+    min-width: 102px;
+    height: 102px;
+    border: none;
+    margin: 10px 10px;
+}
