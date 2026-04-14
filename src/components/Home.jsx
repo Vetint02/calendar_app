@@ -1,23 +1,81 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './css/home.css'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Box from '@mui/material/Box';
 
 export default function Home() {
 
     let paddingDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     let td = new Date();
-    let month = td.getMonth();
-    let year = td.getFullYear();
+    const todayDate = td.getDate();
+    const todayMonth = td.getMonth();
+    const todayYear = td.getFullYear();
 
-    let daysInMonth = new Date(year, month + 1, 0).getDate();
-    let startingDay = new Date(year, month, 1).getDay()
+    const [currentDay, setCurrentDay] = useState(
+        td.getDate()
+    )
+    const [currentMonth, setCurrentMonth] = useState([
+        td.toLocaleDateString('en-us', { month: "long" }),
+        td.getMonth()
+    ]);
+    const [currentYear, setCurrentYear] = useState(
+        td.getFullYear()
+    );
+    const [isLoading, setLoading] = useState(true);
+    const [paddingArray, setPaddingArray] = useState([]);
+    const [daysArray, setDaysArray] = useState([]);
 
-    const startingArray = Array.from({ length: startingDay }, (_, i) => i + 1)
-    const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-    
+    useEffect(() => {
+        let daysInMonth = new Date(currentYear, currentMonth[1] + 1, 0).getDate();
+        let startingDay = new Date(currentYear, currentMonth[1], 1).getDay();
+        setPaddingArray(Array.from({ length: startingDay }, (_, i) => i + 1));
+        setDaysArray(Array.from({ length: daysInMonth }, (_, i) => i + 1));
+        setLoading(false)
+    }, [currentMonth, currentYear])
+
+    function monthBack() {
+        setLoading(true)
+        let newDate = new Date(currentYear, currentMonth[1] - 1);
+        let newMonth = newDate.getMonth();
+        let newMonthLong = newDate.toLocaleDateString('en-us', { month: "long" });
+        setCurrentMonth([newMonthLong, newMonth]);
+        setCurrentYear(newDate.getFullYear());
+    }
+
+    function monthForward() {
+        setLoading(true)
+        let newDate = new Date(currentYear, currentMonth[1] + 1);
+        let newMonth = newDate.getMonth();
+        let newMonthLong = newDate.toLocaleDateString('en-us', { month: "long" });
+        setCurrentMonth([newMonthLong, newMonth]);
+        setCurrentYear(newDate.getFullYear());
+    }
+    console.log(paddingArray)
+    console.log(daysArray)
+
+    if (isLoading) {
+        return (
+            <p>content is loading</p>
+        )
+    }
+
+
     return (
         <div className="calendar">
             <h1 style={{ textAlign: 'center', margin: '20px' }}>Calendar App</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <h2 style={{ textAlign: 'center', margin: '20px' }}>{currentMonth[0]}, {currentYear}</h2>
+                <Box sx={{ margin: '14px' }}>
+                    <ButtonGroup variant="text" aria-label="Basic button group">
+                        <Button onClick={monthBack}><ArrowBackIcon /></Button>
+                        <Button onClick={monthForward}><ArrowForwardIcon /></Button>
+                    </ButtonGroup>
+                </Box>
+            </div>
             <div className="calendar_headers">
                 {
                     paddingDays.map((day, index) => {
@@ -29,20 +87,23 @@ export default function Home() {
             </div>
             <div className="calendar_contents">
                 {
-                    startingArray.map((day, index) => {
+                    paddingArray.map((_, index) => {
                         return (
-                            <div key={index} className="padding_box"/>
+                            <div key={`pad-${index}`} className="padding_box" />
                         )
                     })
                 }
                 {
-                    daysArray.map((day, index) => {
+                    daysArray.map((day) => {
+                        const isToday = day === todayDate && currentMonth[1] === todayMonth && currentYear === todayYear;
                         return (
-                            <div key={index} className="calendar_box"></div>
+                            <div key={day} className={isToday ? "calendar_box_current": "calendar_box"}>
+                                <div className="calendar_text">{day}</div>
+                            </div>
                         )
                     })
                 }
             </div>
-        </div>
+        </div >
     )
 }

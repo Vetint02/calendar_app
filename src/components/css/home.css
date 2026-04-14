@@ -26,17 +26,31 @@
     min-width: 100px;
     height: 100px;
     border: solid darkgrey 1px;
+    border-radius: 10px;
     margin: 10px 10px;
 }
 
 .calendar_box:hover {
     background-color: lightgrey;
-    transition: ease 0.3s
+    transition: ease 0.3s;
+}
+
+.calendar_text {
+    margin: 5px;
 }
 
 .padding_box {
     min-width: 102px;
     height: 102px;
     border: none;
+    margin: 10px 10px;
+}
+
+.calendar_box_current {
+    min-width: 100px;
+    height: 100px;
+    border: solid darkgrey 1px;
+    border-radius: 10px;
+    background-color: lightgrey;
     margin: 10px 10px;
 }
