@@ -1,3 +1,8 @@
+.loading {
+    justify-content: center;
+    padding-Top: 50%;
+}
+
 .calendar_headers {
     display: flex;
     font-weight: bold;

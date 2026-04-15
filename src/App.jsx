@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, Routes, Route} from 'react-router-dom'
 import Home from './components/Home.jsx'
+import NotFound from './components/NotFound.jsx'
 import './App.css'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </div>
   )
