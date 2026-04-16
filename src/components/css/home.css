@@ -36,7 +36,7 @@
 }
 
 .calendar_box:hover {
-    background-color: lightgrey;
+    background-color: rgba(202, 255, 202, 0.397);
     transition: ease 0.3s;
 }
 
