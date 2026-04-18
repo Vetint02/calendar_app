@@ -8,27 +8,28 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function Home() {
+const paddingDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    const paddingDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const mockData = {
-        data_1: {
-            date: {
-                year: 2026,
-                month: 3,
-                day: 24
-            },
-            notice: "this is a test string to see (24)"
+const mockData = [
+    {
+        date: {
+            year: 2026,
+            month: ["March", 3],
+            day: 24
         },
-        data_2: {
-            date: {
-                year: 2026,
-                month: 3,
-                day: 26
-            },
-            notice: "this is a test string to see (26)"
-        }
+        notice: "this is a test string to see (24)"
+    },
+    {
+        date: {
+            year: 2026,
+            month: ["March", 3],
+            day: 26
+        },
+        notice: "this is a test string to see (26)"
     }
+]
+
+export default function Home() {
 
     let td = new Date();
     const todayDate = td.getDate();
@@ -42,32 +43,27 @@ export default function Home() {
     const [currentYear, setCurrentYear] = useState(
         td.getFullYear()
     );
-    const [isLoading, setLoading] = useState(true);
-    const [paddingArray, setPaddingArray] = useState([]);
-    const [daysArray, setDaysArray] = useState([]);
+    const [calendarData, setCalendarData] = useState({
+        padding: [],
+        days: [],
+        loading: true
+    });
 
     const { modalOpen, setModalOpen, setModalData } = useContext(ModalContext)
 
     useEffect(() => {
         let daysInMonth = new Date(currentYear, currentMonth[1] + 1, 0).getDate();
         let startingDay = new Date(currentYear, currentMonth[1], 1).getDay();
-        setPaddingArray(Array.from({ length: startingDay }, (_, i) => i + 1));
-        setDaysArray(Array.from({ length: daysInMonth }, (_, i) => i + 1));
-        setLoading(false)
+        setCalendarData({
+            padding: Array.from({ length: startingDay }, (_, i) => i + 1),
+            days: Array.from({ length: daysInMonth }, (_, i) => i + 1),
+            loading: false
+        });
     }, [currentMonth, currentYear])
 
-    function monthBack() {
-        setLoading(true)
-        let newDate = new Date(currentYear, currentMonth[1] - 1);
-        let newMonth = newDate.getMonth();
-        let newMonthLong = newDate.toLocaleDateString('en-us', { month: "long" });
-        setCurrentMonth([newMonthLong, newMonth]);
-        setCurrentYear(newDate.getFullYear());
-    }
-
-    function monthForward() {
-        setLoading(true)
-        let newDate = new Date(currentYear, currentMonth[1] + 1);
+    function monthChange(number) {
+        setCalendarData({...calendarData, loading: true})
+        let newDate = new Date(currentYear, currentMonth[1] + number);
         let newMonth = newDate.getMonth();
         let newMonthLong = newDate.toLocaleDateString('en-us', { month: "long" });
         setCurrentMonth([newMonthLong, newMonth]);
@@ -75,23 +71,25 @@ export default function Home() {
     }
 
     function modalOverlay(year, month, day) {
-        const dataArray = Object.values(mockData);
-        let filteredData = dataArray.filter((item) =>
+        let filteredData = mockData.filter((item) =>
             item.date.year === year &&
-            item.date.month === month &&
+            item.date.month[1] === month &&
             item.date.day === day
         );
-        console.log(filteredData)
-        setModalData(filteredData[0].notice)
+        if (filteredData[0] === undefined) {
+            setModalData([{ date: { day, month: currentMonth, year }, notice: "" }]);
+        }
+        else {
+            setModalData(filteredData)
+        }
         setModalOpen(true)
     }
 
-    if (isLoading) return (
+    if (calendarData.Loading) return (
         <Box className="loading">
             <CircularProgress />
         </Box>
     )
-
 
     return (
         <div className="calendar">
@@ -100,8 +98,8 @@ export default function Home() {
                 <h2 style={{ textAlign: 'center', margin: '20px' }}>{currentMonth[0]}, {currentYear}</h2>
                 <Box sx={{ margin: '14px' }}>
                     <ButtonGroup variant="text" aria-label="Basic button group">
-                        <Button onClick={monthBack}><ArrowBackIcon /></Button>
-                        <Button onClick={monthForward}><ArrowForwardIcon /></Button>
+                        <Button onClick={() => monthChange(-1)}><ArrowBackIcon /></Button>
+                        <Button onClick={() => monthChange(1)}><ArrowForwardIcon /></Button>
                     </ButtonGroup>
                 </Box>
             </div>
@@ -116,14 +114,14 @@ export default function Home() {
             </div>
             <div className="calendar_contents">
                 {
-                    paddingArray.map((_, index) => {
+                    calendarData.padding.map((index) => {
                         return (
                             <div key={`pad-${index}`} className="padding_box" />
                         )
                     })
                 }
                 {
-                    daysArray.map((day) => {
+                    calendarData.days.map((day) => {
                         const isToday = day === todayDate && currentMonth[1] === todayMonth && currentYear === todayYear;
                         return (
                             <div key={day} onClick={() => modalOverlay(currentYear, currentMonth[1], day)} className={isToday ? "calendar_box_current" : "calendar_box"}>
