@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './css/ModalPopup.css';
 import ModalContext from '../contexts/ModalContext.jsx'
 import Backdrop from '@mui/material/Backdrop';
@@ -28,10 +28,9 @@ export default function TransitionsModal() {
     function handleClose() {
         setModalOpen(false);
     }
-    console.log(modalData)
-    function handleModalRedirect(){
+    function handleModalRedirect() {
         setModalOpen(false);
-        navigate(`/form`)
+        navigate(`/form`);
     }
 
     if (modalData === null || modalData.length === 0) {
@@ -62,19 +61,21 @@ export default function TransitionsModal() {
                     </Typography>
                     <Divider color="black" orientation='horizontal' />
                     <div style={{ margin: "10px 0" }}>
-                        {
-                            modalData.map((data, index) => {
-                                return (
-                                    <div key={`modal_${index}`}>
-                                        <span style={{ fontFamily: "sans-serif" }}>{data.notice}</span>
-                                        <div className="button_group">
-                                            <button className="button_new" onClick={handleModalRedirect}>New</button>
-                                            <button className="button_cancel" onClick={handleClose}>Cancel</button>
+                        <div style={{ display: "flex", flexDirection: "column"}}>
+                            {
+                                modalData[0].notice.map((data, index) => {
+                                    return (
+                                        <div key={`modal_${index}`} className="calendar_data" >
+                                            <div style={{ fontFamily: "sans-serif" }}>{data}</div>
                                         </div>
-                                    </div>
-                                )
-                            })
-                        }
+                                    )
+                                })
+                            }
+                        </div>
+                        <div className="button_group">
+                            <button className="button_new" onClick={handleModalRedirect}>New</button>
+                            <button className="button_cancel" onClick={handleClose}>Cancel</button>
+                        </div>
                     </div>
                 </Box>
             </Fade>

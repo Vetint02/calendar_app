@@ -17,7 +17,7 @@ const mockData = [
             month: ["March", 3],
             day: 24
         },
-        notice: "this is a test string to see (24)"
+        notice: ["This is a test string to see (24)", "Second test string to see (24)"]
     },
     {
         date: {
@@ -25,7 +25,7 @@ const mockData = [
             month: ["March", 3],
             day: 26
         },
-        notice: "this is a test string to see (26)"
+        notice: ["This is a test string to see (26)"]
     }
 ]
 
