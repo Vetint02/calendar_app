@@ -14,7 +14,7 @@ const mockData = [
     {
         date: {
             year: 2026,
-            month: ["March", 3],
+            month: ["April", 3],
             day: 24
         },
         notice: ["This is a test string to see (24)", "Second test string to see (24)"]
@@ -22,7 +22,7 @@ const mockData = [
     {
         date: {
             year: 2026,
-            month: ["March", 3],
+            month: ["April", 3],
             day: 26
         },
         notice: ["This is a test string to see (26)"]
@@ -62,7 +62,7 @@ export default function Home() {
     }, [currentMonth, currentYear])
 
     function monthChange(number) {
-        setCalendarData({...calendarData, loading: true})
+        setCalendarData({ ...calendarData, loading: true })
         let newDate = new Date(currentYear, currentMonth[1] + number);
         let newMonth = newDate.getMonth();
         let newMonthLong = newDate.toLocaleDateString('en-us', { month: "long" });
@@ -77,7 +77,7 @@ export default function Home() {
             item.date.day === day
         );
         if (filteredData[0] === undefined) {
-            setModalData([{ date: { day, month: currentMonth, year }, notice: "" }]);
+            setModalData([{ date: { day, month: currentMonth, year }, notice: [""] }]);
         }
         else {
             setModalData(filteredData)
@@ -126,6 +126,9 @@ export default function Home() {
                         return (
                             <div key={day} onClick={() => modalOverlay(currentYear, currentMonth[1], day)} className={isToday ? "calendar_box_current" : "calendar_box"}>
                                 <div className="calendar_text">{day}</div>
+                                {
+                                    <div></div>
+                                }
                             </div>
                         )
                     })
