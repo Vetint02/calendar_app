@@ -1,0 +1,29 @@
+.nav_links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.nav_links a {
+    margin: 0 10px;
+}
+
+.logout_button {
+    position: absolute;
+    right: 20px;
+    background-color: pink;
+    width: 80px;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.logout_button:hover {
+    background-color: rgb(201, 151, 159);
+    width: 80px;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+}

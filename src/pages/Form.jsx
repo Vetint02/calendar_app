@@ -1,27 +1,56 @@
 import { useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import './css/form.css';
 import ModalContext from '../contexts/ModalContext.jsx';
 
-export default function calendarForm() {
-    const { modalData } = useContext(ModalContext)
+export default function CalendarForm() {
+    const { modalData } = useContext(ModalContext);
+    const navigate = useNavigate();
+
+    const [notice, setNotice] = useState('');
+    const [day, setDay] = useState(modalData.day);
+    const [month, setMonth] = useState(modalData.month + 1);
+    const [year, setYear] = useState(modalData.year);
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:5000/api/content/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ day, month, year, notice }),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                navigate('/');
+            } else {
+                console.error('Failed to save note');
+            }
+        } catch (error) {
+            console.error('Submit error:', error);
+        }
+    }
+
     return (
-        <div>
-            <h2>{modalData[0].date.month[0]}, {modalData[0].date.day}</h2>
-            <form action="http://localhost:5000/api/content/create" method="POST">
-                <div>
-                    <input type="number" id="year" name="year" placeholder="Title..."/>
-                </div>
-                <div>
-                    <input type="number" id="month" name="month" placeholder="Title..."/>
-                </div>
-                <div>
-                    <input type="number" id="day" name="day" placeholder="Title..."/>
-                </div>
-                <div>
-                    <textarea id="notice" name="notice" placeholder="Write your note here..."></textarea>
-                </div>
-                <button type="submit">Save Note</button>
-            </form>
+        <div className="calendar-form-container">
+            {modalData && (
+                <h2 className="calendar-form-date-header">
+                    📅 {modalData.month} / {modalData.day}
+                </h2>
+            )}
+
+            <div className="input-row">
+                <input type="number" value={month} onChange={e => setMonth(e.target.value)} placeholder="Month" />
+                <input type="number" value={day} onChange={e => setDay(e.target.value)} placeholder="Day" />
+                <input type="number" value={year} onChange={e => setYear(e.target.value)} placeholder="Year" />
+            </div>
+
+            <div>
+                <textarea value={notice} onChange={e => setNotice(e.target.value)} placeholder="Write your note here..." />
+            </div>
+
+            <button className="calendar-save-btn" onClick={handleSubmit}>Save Note</button>
         </div>
     )
 }

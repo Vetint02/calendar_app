@@ -1,0 +1,92 @@
+/* Container centered and framed inside your viewports */
+.calendar-form-container {
+  max-width: 480px;
+  width: 100%;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Header style for the designated calendar date */
+.calendar-form-date-header {
+  font-size: 20px;
+  font-weight: 700;
+  color: #171717;
+  margin-top: 0;
+  margin-bottom: 28px;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+/* Split layout grouping day, month, year elements side-by-side */
+.input-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Minimal styling for number input boxes */
+.calendar-form-container input[type="number"],
+.calendar-form-container textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+  font-family: inherit;
+  color: #171717;
+}
+
+/* Distinct sizing constraints for content textareas */
+.calendar-form-container textarea {
+  min-height: 140px;
+  resize: vertical;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Soft focusing micro-animations */
+.calendar-form-container input:focus,
+.calendar-form-container textarea:focus {
+  outline: none;
+  border-color: #171717; /* Dark borders instead of intense colors */
+  box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.05);
+}
+
+/* Input dynamic placeholder colors */
+.calendar-form-container input::placeholder,
+.calendar-form-container textarea::placeholder {
+  color: #a3a3a3;
+}
+
+/* Minimalist dark block action submit button */
+.calendar-save-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #171717; /* Slate dark modern block appearance */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+/* Button responsive mouse interactive filters */
+.calendar-save-btn:hover {
+  background-color: #404040;
+}
+
+.calendar-save-btn:active {
+  background-color: #0a0a0a;
+}

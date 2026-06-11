@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import ModalContext from '../contexts/ModalContext.jsx'
+import FetchData from '../components/FetchData.jsx'
 import './css/home.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -70,70 +71,64 @@ export default function Home() {
         setCurrentYear(newDate.getFullYear());
     }
 
-    function modalOverlay(year, month, day) {
-        let filteredData = mockData.filter((item) =>
-            item.date.year === year &&
-            item.date.month[1] === month &&
-            item.date.day === day
-        );
-        if (filteredData[0] === undefined) {
-            setModalData([{ date: { day, month: currentMonth, year }, notice: [""] }]);
-        }
-        else {
-            setModalData(filteredData)
-        }
+    async function modalOverlay(day, month, year) {
+        const response = await FetchData(day, month, year);
+        let notices = response ? response.map(item => item.notice): [];
+        setModalData({ day, month, year, notices })
         setModalOpen(true)
     }
 
-    if (calendarData.Loading) return (
+    if (calendarData.loading) return (
         <Box className="loading">
             <CircularProgress />
         </Box>
     )
 
     return (
-        <div className="calendar">
-            <h1 style={{ textAlign: 'center', margin: '20px' }}>Calendar App</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <h2 style={{ textAlign: 'center', margin: '20px' }}>{currentMonth[0]}, {currentYear}</h2>
-                <Box sx={{ margin: '14px' }}>
-                    <ButtonGroup variant="text" aria-label="Basic button group">
-                        <Button onClick={() => monthChange(-1)}><ArrowBackIcon /></Button>
-                        <Button onClick={() => monthChange(1)}><ArrowForwardIcon /></Button>
-                    </ButtonGroup>
-                </Box>
-            </div>
-            <div className="calendar_headers">
-                {
-                    paddingDays.map((day) => {
-                        return (
-                            <div key={day} className="head">{day}</div>
-                        )
-                    })
-                }
-            </div>
-            <div className="calendar_contents">
-                {
-                    calendarData.padding.map((index) => {
-                        return (
-                            <div key={`pad-${index}`} className="padding_box" />
-                        )
-                    })
-                }
-                {
-                    calendarData.days.map((day) => {
-                        const isToday = day === todayDate && currentMonth[1] === todayMonth && currentYear === todayYear;
-                        return (
-                            <div key={day} onClick={() => modalOverlay(currentYear, currentMonth[1], day)} className={isToday ? "calendar_box_current" : "calendar_box"}>
-                                <div className="calendar_text">{day}</div>
-                                {
-                                    <div></div>
-                                }
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        </div >
+        <div>
+            <div className="calendar">
+                <h1 style={{ textAlign: 'center', margin: '20px' }}>Calendar App</h1>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <h2 style={{ textAlign: 'center', margin: '20px' }}>{currentMonth[0]}, {currentYear}</h2>
+                    <Box sx={{ margin: '14px' }}>
+                        <ButtonGroup variant="text" aria-label="Basic button group">
+                            <Button onClick={() => monthChange(-1)}><ArrowBackIcon /></Button>
+                            <Button onClick={() => monthChange(1)}><ArrowForwardIcon /></Button>
+                        </ButtonGroup>
+                    </Box>
+                </div>
+                <div className="calendar_headers">
+                    {
+                        paddingDays.map((day) => {
+                            return (
+                                <div key={day} className="head">{day}</div>
+                            )
+                        })
+                    }
+                </div>
+                <div className="calendar_contents">
+                    {
+                        calendarData.padding.map((index) => {
+                            return (
+                                <div key={`pad-${index}`} className="padding_box" />
+                            )
+                        })
+                    }
+                    {
+                        calendarData.days.map((day) => {
+                            const isToday = day === todayDate && currentMonth[1] === todayMonth && currentYear === todayYear;
+                            return (
+                                <div key={day} onClick={() => modalOverlay(day, currentMonth[1], currentYear)} className={isToday ? "calendar_box_current" : "calendar_box"}>
+                                    <div className="calendar_text">{day}</div>
+                                    {
+                                        <div></div>
+                                    }
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            </div >
+        </div>
     )
 }

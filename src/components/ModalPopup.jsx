@@ -23,53 +23,44 @@ const style = {
 };
 
 export default function TransitionsModal() {
-    const { modalOpen, setModalOpen, modalData } = useContext(ModalContext)
+    const { modalOpen, setModalOpen, modalData } = useContext(ModalContext);
     const navigate = useNavigate();
+
     function handleClose() {
         setModalOpen(false);
     }
     function handleModalRedirect() {
         setModalOpen(false);
-        navigate(`/form`);
-    }
-
-    if (modalData === null || modalData.length === 0) {
-        return (
-            <div>
-            </div>
-        )
+        navigate('/form');
     }
 
     return (
         <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
             open={modalOpen}
             onClose={handleClose}
             closeAfterTransition
             slots={{ backdrop: Backdrop }}
-            slotProps={{
-                backdrop: {
-                    timeout: 500,
-                },
-            }}
+            slotProps={{ backdrop: { timeout: 500 } }}
         >
             <Fade in={modalOpen}>
                 <Box sx={style}>
-                    <Typography id="transition-modal-title" variant="h6" component="h2">
-                        {modalData[0].date.month[0]} / {modalData[0].date.day}
+                    <Typography variant="h6" component="h2">
+                        {modalData
+                            ? `${modalData.month + 1}/${modalData.day}/${modalData.year}`
+                            : ""}
                     </Typography>
-                    <Divider color="black" orientation='horizontal' />
+                    <Divider color="black" orientation="horizontal" />
                     <div style={{ margin: "10px 0" }}>
-                        <div style={{ display: "flex", flexDirection: "column"}}>
-                            {
-                                modalData[0].notice.map((data, index) => {
-                                    return (
-                                        <div key={`modal_${index}`} className="calendar_data" >
-                                            <div style={{ fontFamily: "sans-serif" }}>{data}</div>
-                                        </div>
-                                    )
-                                })
+                        <div style={{ display: "flex", flexDirection: "column" }}>
+                            {modalData?.notices?.length > 0
+                                ? modalData.notices.map((notice, index) => (
+                                    <div key={`modal_${index}`} className="calendar_data">
+                                        <div style={{ fontFamily: "sans-serif" }}>{notice}</div>
+                                    </div>
+                                ))
+                                : <Typography variant="body2" color="text.secondary">
+                                    No events for this day.
+                                </Typography>
                             }
                         </div>
                         <div className="button_group">
