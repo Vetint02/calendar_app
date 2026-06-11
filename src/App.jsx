@@ -23,6 +23,7 @@ function App() {
   const [isAuthenticated, setAuthentication] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [noticeCounts, setNoticeCounts] = useState({});
+  console.log('API URL:', import.meta.env.VITE_API_URL);
 
   useEffect(() => {
     async function isLoggedIn() {
