@@ -28,6 +28,7 @@
 }
 
 .calendar_box {
+    position: relative;
     min-width: 100px;
     height: 100px;
     border: solid darkgrey 1px;
@@ -52,10 +53,24 @@
 }
 
 .calendar_box_current {
+    position: relative;
     min-width: 100px;
     height: 100px;
     border: solid darkgrey 1px;
     border-radius: 10px;
     background-color: lightgrey;
     margin: 10px 10px;
+}
+
+.notice_badge {
+    position: absolute;
+    bottom: 4px;
+    right: 6px;
+    background-color: #171717;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 1px 7px;
+    line-height: 1.6;
 }

@@ -22,16 +22,66 @@ const style = {
     p: 4,
 };
 
+const eventCardStyle = {
+    border: '1px solid #ccc',
+    borderRadius: '6px',
+    padding: '8px 12px',
+    marginBottom: '8px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '8px',
+    backgroundColor: '#fafafa',
+};
+
+const eventActionsStyle = {
+    display: 'flex',
+    gap: '6px',
+    flexShrink: 0,
+};
+
 export default function TransitionsModal() {
-    const { modalOpen, setModalOpen, modalData } = useContext(ModalContext);
+    const { modalOpen, setModalOpen, modalData, setModalData, refreshCounts } = useContext(ModalContext);
     const navigate = useNavigate();
 
     function handleClose() {
         setModalOpen(false);
+        refreshCounts(modalData.month, modalData.year);
     }
+
     function handleModalRedirect() {
         setModalOpen(false);
         navigate('/form');
+    }
+
+    async function handleDelete(index) {
+        const noticeToDelete = modalData.notices[index];
+        try {
+            const response = await fetch(`http://localhost:5000/api/content/delete/${noticeToDelete.id}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            if (response.ok) {
+                const updatedNotices = modalData.notices.filter((_, i) => i !== index);
+                setModalData({ ...modalData, notices: updatedNotices });
+                refreshCounts(modalData.month, modalData.year);
+            } else {
+                console.error('Failed to delete note');
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
+        }
+    }
+
+    function handleEdit(index) {
+        setModalOpen(false);
+        navigate('/form/edit', {
+            state: {
+                editId: modalData.notices[index].id,
+                editData: modalData.notices[index].text,
+                modalData
+            }
+        });
     }
 
     return (
@@ -54,8 +104,24 @@ export default function TransitionsModal() {
                         <div style={{ display: "flex", flexDirection: "column" }}>
                             {modalData?.notices?.length > 0
                                 ? modalData.notices.map((notice, index) => (
-                                    <div key={`modal_${index}`} className="calendar_data">
-                                        <div style={{ fontFamily: "sans-serif" }}>{notice}</div>
+                                    <div key={`modal_${index}`} style={eventCardStyle}>
+                                        <div style={{ fontFamily: "sans-serif", flexGrow: 1 }}>
+                                            {notice.text}
+                                        </div>
+                                        <div style={eventActionsStyle}>
+                                            <button
+                                                className="button_edit"
+                                                onClick={() => handleEdit(index)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="button_delete"
+                                                onClick={() => handleDelete(index)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
                                     </div>
                                 ))
                                 : <Typography variant="body2" color="text.secondary">

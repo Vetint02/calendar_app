@@ -1,14 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './css/form.css';
-import ModalContext from '../contexts/ModalContext.jsx';
 
-export default function CalendarForm() {
-    const { modalData } = useContext(ModalContext);
+export default function CalendarEditForm() {
     const navigate = useNavigate();
-    const { state } = useLocation()
+    const { state } = useLocation();
+    const { editId, editData, modalData } = state || {};
 
-    const [notice, setNotice] = useState('');
+    const [notice, setNotice] = useState(editData || '');
     const [day, setDay] = useState(modalData.day);
     const [month, setMonth] = useState(modalData.month + 1);
     const [year, setYear] = useState(modalData.year);
@@ -16,21 +15,34 @@ export default function CalendarForm() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/api/content/create', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:5000/api/content/update`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ day, month, year, notice }),
+                body: JSON.stringify({ id: editId, day, month, year, notice }),
                 credentials: 'include'
             });
 
             if (response.ok) {
                 navigate('/', { state: { returnMonth: modalData.month, returnYear: modalData.year } });
             } else {
-                console.error('Failed to save note');
+                console.error('Failed to update note');
             }
         } catch (error) {
-            console.error('Submit error:', error);
+            console.error('Update error:', error);
         }
+    }
+
+    function handleCancel() {
+        navigate('/', { state: { returnMonth: modalData.month, returnYear: modalData.year } });
+    }
+
+    if (!state) {
+        return (
+            <div className="calendar-form-container">
+                <p style={{ textAlign: 'center', color: '#a3a3a3' }}>No event data found.</p>
+                <button className="calendar-save-btn" onClick={() => navigate('/')}>Go Back</button>
+            </div>
+        );
     }
 
     return (
@@ -48,10 +60,13 @@ export default function CalendarForm() {
             </div>
 
             <div>
-                <textarea value={notice} onChange={e => setNotice(e.target.value)} placeholder="Write your note here..." />
+                <textarea value={notice} onChange={e => setNotice(e.target.value)} placeholder="Edit your note here..." />
             </div>
 
-            <button className="calendar-save-btn" onClick={handleSubmit}>Save Note</button>
+            <div className="calendar-form-btn-group">
+                <button className="calendar-save-btn" onClick={handleSubmit}>Save Changes</button>
+                <button className="calendar-cancel-btn" onClick={handleCancel}>Cancel</button>
+            </div>
         </div>
-    )
+    );
 }

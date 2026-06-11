@@ -15,10 +15,6 @@ export default function About() {
 
                 <hr className="about-divider" />
 
-                <footer className="about-footer">
-                    <p>&copy; 2026 Roy Park. All rights reserved.</p>
-                </footer>
-
             </div>
         </div>
     );

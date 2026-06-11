@@ -30,7 +30,7 @@ export default function Register() {
             if (response.ok) {
                 navigate('/login');
             } else {
-                setError(data.message || 'Registration failed. Please try again.');
+                setError(data.message || 'Username is in use, try a different username');
             }
         } catch (err) {
             console.error('Registration link error:', err);
