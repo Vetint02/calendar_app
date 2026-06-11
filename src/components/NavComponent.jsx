@@ -8,7 +8,7 @@ export default function Nav() {
     const navigate = useNavigate();
 
     async function handleLogout() {
-        const response = await fetch('http://localhost:5000/api/auth/logout', {
+        const response = await fetch('https://calendar-app-backend-q3hl.onrender.com/api/auth/logout', {
             method: 'POST',
             credentials: 'include'
         });

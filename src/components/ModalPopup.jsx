@@ -57,7 +57,7 @@ export default function TransitionsModal() {
     async function handleDelete(index) {
         const noticeToDelete = modalData.notices[index];
         try {
-            const response = await fetch(`http://localhost:5000/api/content/delete/${noticeToDelete.id}`, {
+            const response = await fetch(`https://calendar-app-backend-q3hl.onrender.com/api/content/delete/${noticeToDelete.id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });

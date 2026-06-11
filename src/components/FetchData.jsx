@@ -1,6 +1,6 @@
 export default async function FetchData(day, month, year) {
     try {
-        const response = await fetch('http://localhost:5000/api/content/', {
+        const response = await fetch('https://calendar-app-backend-q3hl.onrender.com/api/content/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ day, month, year }),

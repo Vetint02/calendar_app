@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     async function isLoggedIn() {
       try {
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch('https://calendar-app-backend-q3hl.onrender.com/api/auth/me', {
           method: "GET",
           credentials: "include"
         });
@@ -49,7 +49,7 @@ function App() {
   const refreshCounts = useCallback(async (month, year) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/content/month?month=${month + 1}&year=${year}`,
+        `https://calendar-app-backend-q3hl.onrender.com/api/content/month?month=${month + 1}&year=${year}`,
         { credentials: 'include' }
       );
       if (response.ok) {

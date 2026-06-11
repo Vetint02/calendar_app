@@ -15,7 +15,7 @@ export default function CalendarEditForm() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5000/api/content/update`, {
+            const response = await fetch(`https://calendar-app-backend-q3hl.onrender.com/api/content/update`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: editId, day, month, year, notice }),
