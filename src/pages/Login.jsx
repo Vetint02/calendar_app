@@ -14,7 +14,7 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch('https://calendar-app-backend-q3hl.onrender.com/api/auth/', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),

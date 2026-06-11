@@ -16,7 +16,7 @@ export default function CalendarForm() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch('https://calendar-app-backend-q3hl.onrender.com/api/content/create', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/content/create`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ day, month, year, notice }),
