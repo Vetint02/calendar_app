@@ -55,8 +55,10 @@ function App() {
         `${import.meta.env.VITE_API_URL}/api/content/month?month=${month + 1}&year=${year}`,
         { credentials: 'include' }
       );
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : [];
+
       if (response.ok) {
-        const data = await response.json();
         const counts = {};
         data.forEach(item => {
           counts[item.day] = (counts[item.day] || 0) + 1;
