@@ -1,22 +1,21 @@
 export default async function FetchData(day, month, year) {
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/content/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ day, month, year }),
-            credentials: 'include' 
-        });
+        const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/content?day=${day}&month=${month + 1}&year=${year}`,
+            { credentials: 'include' }
+        );
 
-        if (!response.ok) {
-            console.log("api request failed")
-            return null
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : [];
+
+        if (response.ok) {
+            return data;
+        } else {
+            console.error('FetchData error:', data.message);
+            return [];
         }
-
-        const data = await response.json();
-        return data; 
-
     } catch (error) {
-        console.error("Error in FetchData utility:", error.message);
-        return null;
+        console.error('Error in FetchData utility:', error);
+        return [];
     }
 }
