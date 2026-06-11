@@ -14,14 +14,15 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
                 credentials: 'include'
             });
 
-            const data = await response.json();
+            const text = await response.text();
+            const data = text ? JSON.parse(text) : {};
 
             if (response.ok) {
                 setAuthentication(true);
@@ -32,7 +33,7 @@ export default function Login() {
         } catch (error) {
             console.error("Login error:", error);
         }
-    };
+    }
 
     return (
         <div className="login-wrapper">
